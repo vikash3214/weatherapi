@@ -1,0 +1,90 @@
+<!--181005A-->
+<html>
+<head>
+    <title>Weather API</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+</head>
+<body>
+    <div id="weather_container">
+        <input id="q_input" placeholder="what is the weather in ...">
+        <button id="submit">Submit</button>
+        <div id="output_weather"></div>
+    </div>
+    <script>
+        window.onload = function () {
+            document.getElementById('q_input').addEventListener("keyup", function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    sendData();
+                }
+            });
+            document.getElementById('submit').addEventListener("click", sendData);
+        }
+
+
+        var sendData = function () {
+            var q = document.getElementById('q_input').value;
+            if (q != "") {
+                var jobj = JSON.stringify({
+                    'q': q
+                });
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', "/weatherapi", true);
+                xhr.setRequestHeader("Content-type", "application/json");
+                console.log(jobj);
+                xhr.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        response = JSON.parse(xhr.responseText);
+                        console.log(response);
+                        if (response["status"] == 'ok') {
+                            console.log("sgdvcsdvcusdvc")
+                            document.getElementById('output_weather').textContent = response["message"];
+                        }
+                    }
+                };
+                xhr.send(jobj);
+            }
+        };
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background: #fafafa;
+            font-family: 'Montserrat';
+        }
+
+        input {
+            font-family: 'Montserrat';
+        }
+
+        #weather_container {
+            width: 300px;
+            margin: 2rem;
+        }
+
+        #q_input {
+            width: 75%;
+            padding: 0.5rem;
+        }
+
+        #submit {
+            border-radius: 0.2rem;
+            width: 23%;
+            padding: 0.6rem 0.5rem;
+            background: #0179b7;
+            color: #FFF;
+            border: 1px solid transparent;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        #output_weather {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #000;
+        }
+    </style>
+</body>
+
+</html>
